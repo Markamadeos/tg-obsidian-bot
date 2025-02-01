@@ -52,6 +52,8 @@ fun saveToMarkdown(message: Message, bot: Bot, token: String) {
         markdownContent.append("**Forwarded from [${it.title}](https://t.me/${it.username}/${message.chat.id})**")
     }
 
+    markdownContent.append("\n\n")
+
     message.photo?.let {
         val fileId = it.last().fileId
         val file = bot.getFile(fileId)
@@ -97,25 +99,14 @@ fun saveToMarkdown(message: Message, bot: Bot, token: String) {
         )
     }
 
-    message.audio?.let {
-        val fileId = it.fileId
-        val file = bot.getFile(fileId)
-        file.fold(
-            { result ->
-                val fileUrl = "https://api.telegram.org/file/bot$token/${result?.result?.filePath}"
-                val downloadedFile = downloadFile(fileUrl, "audio_${result?.result?.filePath?.split("/")?.last()}")
-                markdownContent.append("[Audio: ${it.fileName}]($downloadedFile)\n\n")
-            },
-            { error ->
-                println("Error fetching audio file: $error")
-            }
-        )
+    message.text?.let {
+        markdownContent.append(it.toMarkdown(message.entities))
+    }
+    message.caption?.let {
+        markdownContent.append(it.toMarkdown(message.captionEntities))
     }
 
-    markdownContent.append("\n\n")
-
-    markdownContent.append("${message.text?.toMarkdown(message.entities)}\n\n")
-    markdownContent.append("${message.caption?.toMarkdown(message.captionEntities)}\n\n")
+    markdownContent.append("\n---\n")
 
     markdownFile.appendText(markdownContent.toString())
 }
