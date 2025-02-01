@@ -29,8 +29,7 @@ fun main(args: Array<String>) {
 }
 
 fun saveToMarkdown(message: Message) {
-    print(message.text?.toMarkdown(message.entities))
-    val markdownFile = File("/data/forwarded_messages.md")
+    val markdownFile = File("/data/inbox.md")
     if (!markdownFile.exists()) {
         markdownFile.createNewFile()
     }
@@ -51,7 +50,8 @@ fun saveToMarkdown(message: Message) {
 
     markdownContent.append("\n\n")
 
-    markdownContent.append("**Текст:** ${message.text?.toMarkdown(message.entities)}\n\n")
+    markdownContent.append("${message.text?.toMarkdown(message.entities)}\n\n")
+    markdownContent.append("${message.caption?.toMarkdown(message.captionEntities)}\n\n")
 
     markdownFile.appendText(markdownContent.toString())
 }
@@ -79,7 +79,7 @@ fun setupBot(config: Config): Bot {
         dispatch {
             message {
                 val message = update.message
-                println("receive message from ${message?.chat?.username} ${message?.entities}")
+                println("receive message from ${message?.chat?.username} $message")
                 if (message != null && message.chat.username == config.username) {
                     this.bot.setMessageReaction(
                         chatId = ChatId.fromId(message.chat.id),
