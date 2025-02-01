@@ -61,7 +61,7 @@ fun saveToMarkdown(message: Message, bot: Bot, token: String) {
             { result ->
                 val fileUrl = "https://api.telegram.org/file/bot$token/${result?.result?.filePath}"
                 val downloadedFile = downloadFile(fileUrl, "photo_${result?.result?.filePath?.split("/")?.last()}")
-                markdownContent.append("![image]($downloadedFile)\n\n")
+                markdownContent.append("![image](media/${downloadedFile.substringAfterLast('/')})\n\n")
             },
             { error ->
                 println("Error fetching photo file: $error")
@@ -76,7 +76,7 @@ fun saveToMarkdown(message: Message, bot: Bot, token: String) {
             { result ->
                 val fileUrl = "https://api.telegram.org/file/bot$token/${result?.result?.filePath}"
                 val downloadedFile = downloadFile(fileUrl, "video_${result?.result?.filePath?.split("/")?.last()}")
-                markdownContent.append("![video]($downloadedFile)\n\n")
+                markdownContent.append("![video](media/${downloadedFile.substringAfterLast('/')})\n\n")
             },
             { error ->
                 println("Error fetching video file: $error")
@@ -106,7 +106,7 @@ fun saveToMarkdown(message: Message, bot: Bot, token: String) {
         markdownContent.append(it.toMarkdown(message.captionEntities))
     }
 
-    markdownContent.append("\n---\n")
+    markdownContent.append("\n\n---\n")
 
     markdownFile.appendText(markdownContent.toString())
 }
