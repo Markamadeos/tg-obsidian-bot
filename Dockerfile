@@ -1,8 +1,8 @@
-FROM adoptopenjdk/openjdk11
+FROM openjdk:17-alpine
 
-USER 1000
+USER 1026
 
-ENTRYPOINT ["/telegram_bot/bin/telegram_bot", "/telegram_bot/local.config.json"]
+ENTRYPOINT ["/telegram_bot/bin/telegram_bot", "/telegram_bot/config.json"]
 
 ADD ./build/distributions/telegram_bot.tar /
-ADD ./local.config.json /telegram_bot/
+ADD ./config.json /telegram_bot/

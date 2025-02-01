@@ -1,6 +1,10 @@
 version: "3.4"
 
 services:
-  server:
-    build: .
+  runner:
+    image: m4gw4y/obsidian-sync-tg-bot
+    container_name: obsidian-tg-bot
     restart: unless-stopped
+    volumes:
+      - "./data:/data"
+      - "./config.json:/telegram_bot/config.json:ro"

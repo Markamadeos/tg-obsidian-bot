@@ -1,15 +1,5 @@
 {
-  "token": "your bot token",
-  "client": {
-    "connectionTimeoutMillis": 10000,
-    "requestTimeoutMillis": 10000,
-    "responseTimeoutMillis": 10000,
-    "proxy": {
-      "hostname": "127.0.0.1",
-      "port": 1080,
-      "type": "socks",
-      "username": "username",
-      "password": "password"
-    }
-  }
+  "token": "YOUR_BOT_TOKEN",
+  "username": "YOUR_TG_USERNAME"
 }
+
