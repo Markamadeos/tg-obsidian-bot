@@ -17,7 +17,7 @@ app=obsidian-sync-tg-bot
 version=0.0.1
 server="m4gw4y"
 
-assert_success ../gradlew build
+assert_success ./gradlew build
 assert_success docker build -t $app:"$version" .
 assert_success docker tag $app:"$version" $server/$app:$version
 assert_success docker tag $app:"$version" $server/$app:latest
