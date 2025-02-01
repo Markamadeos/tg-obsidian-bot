@@ -1,49 +1,64 @@
-import config.Config
-import dev.inmo.tgbotapi.bot.ktor.telegramBot
-import dev.inmo.tgbotapi.extensions.api.bot.getMe
-import dev.inmo.tgbotapi.extensions.api.send.reply
-import dev.inmo.tgbotapi.extensions.behaviour_builder.buildBehaviourWithLongPolling
-import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onCommand
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
-import java.io.File
-import kotlinx.coroutines.*
-import kotlinx.serialization.json.Json
+package com.magway.uwu
 
-/**
- * This method by default expects one argument in [args] field: telegram bot configuration
- */
-suspend fun main(args: Array<String>) {
-    // create json to decode config
+import com.github.kotlintelegrambot.bot
+import com.github.kotlintelegrambot.dispatch
+import com.github.kotlintelegrambot.dispatcher.message
+import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.Message
+import com.github.kotlintelegrambot.entities.reaction.ReactionType
+import config.Config
+import kotlinx.serialization.json.Json
+import java.io.File
+
+fun main(args: Array<String>) {
+    println("о привет")
     val json = Json { ignoreUnknownKeys = true }
-    // decode config
     val config: Config = json.decodeFromString(Config.serializer(), File(args.first()).readText())
-    // that is your bot
-    val bot = telegramBot(config.token) {
-        client = HttpClient(OkHttp) {
-            config.client ?.apply {
-                // setting up telegram bot client
-                setupConfig()
+
+    val botToken = config.token
+    val username = config.username
+
+    val bot = bot {
+        token = botToken
+        dispatch {
+            message {
+                val message = update.message
+                println("receive message from ${message?.chat?.username} $message")
+                if (message != null && message.chat.username == username) {
+                    this.bot.setMessageReaction(
+                        chatId = ChatId.fromId(message.chat.id),
+                        messageId = message.messageId,
+                        reaction = listOf(ReactionType.Emoji("❤\uFE0F\u200D\uD83D\uDD25")),
+                        isBig = true
+                    )
+                    saveToMarkdown(message)
+                }
             }
         }
     }
 
-    // that is kotlin coroutine scope which will be used in requests and parallel works under the hood
-    val scope = CoroutineScope(Dispatchers.Default)
+    bot.startPolling()
+}
 
-    // here should be main logic of your bot
-    bot.buildBehaviourWithLongPolling(scope) {
-        // in this lambda you will be able to call methods without "bot." prefix
-        val me = getMe()
+fun saveToMarkdown(message: Message) {
+    val markdownFile = File("/data/forwarded_messages.md")
+    if (!markdownFile.exists()) {
+        markdownFile.createNewFile()
+    }
 
-        // this method will create point to react on each /start command
-        onCommand("start", requireOnlyCommandInMessage = true) {
-            // simply reply :)
-            reply(it, "Hello, I am ${me.firstName}")
-        }
+    val markdownContent = StringBuilder()
 
-        // That will be called on the end of bot initiation. After that println will be started long polling and bot will
-        // react on your commands
-        println(me)
-    }.join()
+    message.forwardFrom?.let {
+        markdownContent.append("**Forwarded from [${it.username}](https://t.me/${it.username}/${message.chat.id})**")
+    }
+
+    message.forwardFromChat?.let {
+        markdownContent.append("**Forwarded from [${it.title}](https://t.me/${it.username}/${message.chat.id})**")
+    }
+    println(markdownContent.toString())
+
+    markdownContent.append("**Текст:** ${message.text}\n\n")
+
+
+    markdownFile.appendText(markdownContent.toString())
 }

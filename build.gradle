@@ -17,14 +17,13 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven { url "https://git.inmo.dev/api/packages/InsanusMokrassar/maven" }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     implementation libs.kotlin
-
-    implementation libs.tgbotapi
-    implementation libs.ktor.client.okhttp
+    implementation libs.kotlintelegrambot
+    implementation libs.serialization.json
 }
 
 application {

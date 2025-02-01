@@ -1,15 +1,14 @@
 [versions]
 
 kotlin = "2.1.0"
-tgbotapi = "23.1.0"
-ktor = "3.0.3"
+kotlintelegrambot = "6.2.0"
+serialization-json = "1.6.0"
 
 [libraries]
 
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-tgbotapi = { module = "dev.inmo:tgbotapi", version.ref = "tgbotapi" }
-
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+kotlintelegrambot = { module = "com.github.kotlin-telegram-bot:kotlin-telegram-bot", version.ref = "kotlintelegrambot" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-json" }
 
 # Libs for classpath
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
