@@ -27,7 +27,6 @@ fun String.toMarkdown(entities: List<MessageEntity>?): String {
 
             else -> {}
         }
-        println(markdownContent.toString())
     }
 
     return markdownContent.toString()
