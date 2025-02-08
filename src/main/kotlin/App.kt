@@ -40,17 +40,7 @@ fun saveToMarkdown(message: Message, bot: Bot, token: String) {
 
     val markdownContent = StringBuilder()
 
-    message.forwardFrom?.let {
-        markdownContent.append("**Forwarded from [${it.username}](https://t.me/${it.username}/${message.chat.id})**")
-    }
-
-    message.forwardSenderName?.let {
-        markdownContent.append("**Forwarded from $it**")
-    }
-
-    message.forwardFromChat?.let {
-        markdownContent.append("**Forwarded from [${it.title}](https://t.me/${it.username}/${message.chat.id})**")
-    }
+    markdownContent.append(getForwardTitle(message))
 
     markdownContent.append("\n\n")
 
@@ -109,6 +99,15 @@ fun saveToMarkdown(message: Message, bot: Bot, token: String) {
     markdownContent.append("\n\n---\n")
 
     markdownFile.appendText(markdownContent.toString())
+}
+
+fun getForwardTitle(message: Message): String? {
+    return when {
+        message.forwardFrom != null -> "**Forwarded from [${message.forwardFrom?.username}](https://t.me/${message.forwardFrom?.username}/${message.chat.id})**"
+        message.forwardSenderName != null -> "**Forwarded from [${message.forwardSenderName}](https://t.me/${message.forwardSenderName}/${message.chat.id})**"
+        message.forwardFromChat != null -> "**Forwarded from [${message.forwardFromChat?.title}](https://t.me/${message.forwardFromChat?.username}/${message.chat.id})**"
+        else -> null
+    }
 }
 
 fun parseConfigFile(file: File): Config {

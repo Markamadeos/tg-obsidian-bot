@@ -4,19 +4,17 @@ import com.github.kotlintelegrambot.entities.MessageEntity
 
 fun String.toMarkdown(entities: List<MessageEntity>?): String {
     val markdownContent = StringBuilder(this)
-    if (entities != null) {
-        entities.forEach { entity ->
-            when (entity.type) {
-                MessageEntity.Type.BOLD -> {
-                    markdownContent.insert(entity.offset, "**").insert(entity.offset + entity.length + 2, "**")
-                }
-
-                MessageEntity.Type.ITALIC -> {
-                    markdownContent.insert(entity.offset, "*").insert(entity.offset + entity.length + 1, "*")
-                }
-
-                else -> {}
+    entities?.forEach { entity ->
+        when (entity.type) {
+            MessageEntity.Type.BOLD -> {
+                markdownContent.insert(entity.offset, "**").insert(entity.offset + entity.length + 2, "**")
             }
+
+            MessageEntity.Type.ITALIC -> {
+                markdownContent.insert(entity.offset, "*").insert(entity.offset + entity.length + 1, "*")
+            }
+
+            else -> {}
         }
     }
     return markdownContent.toString()
