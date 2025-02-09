@@ -8,7 +8,7 @@ This Dockerized Telegram bot allows you to save forwarded messages directly to y
 
 1. **Set up your Obsidian vault** on a host of your choice.
 2. **Get a Telegram bot token** from [BotFather](https://core.telegram.org/bots#botfather).
-3. **Deploy the Docker container** with `obsidian-tg-bot`.
+3. **Deploy the Docker container** with `tg-obsidian-bot`.
 4. **Configure directories** and settings.
 5. **Forward messages** to the bot.
 6. **PROFIT!** Your messages are saved as notes in your Obsidian vault.
