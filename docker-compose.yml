@@ -1,10 +1,12 @@
 version: "3.4"
-
 services:
   runner:
     image: m4gw4y/obsidian-sync-tg-bot
     container_name: obsidian-tg-bot
+    environment:
+      - UID=1026
+      - GID=100
     restart: unless-stopped
     volumes:
-      - "./data:/data"
+      - "data:/data"
       - "./config.json:/telegram_bot/config.json:ro"
